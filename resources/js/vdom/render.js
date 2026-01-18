@@ -1,18 +1,33 @@
-export function render(vNode)
-{
+export function render(vNode) {
     if (!vNode) return document.createTextNode(''); // Guard against null/undefined
 
     if (typeof vNode === 'string' || typeof vNode === 'number') {
         return document.createTextNode(String(vNode));
     }
 
+    // Handle arrays (fragments)
+    if (Array.isArray(vNode)) {
+        const fragment = document.createDocumentFragment();
+        vNode.forEach(child => {
+            if (child !== null && child !== undefined) {
+                fragment.appendChild(render(child));
+            }
+        });
+        return fragment;
+    }
+
     const $el = document.createElement(vNode.type);
 
     for (const [key, value] of Object.entries(vNode.props || {})) {
+        // Skip null/undefined values
+        if (value === null || value === undefined) continue;
+        
         // 🔹 EVENT HANDLERS
         if (key.startsWith('on')) {
             const eventName = key.toLowerCase().substring(2);
-            $el.addEventListener(eventName, value);
+            if (typeof value === 'function') {
+                $el.addEventListener(eventName, value);
+            }
         } else if (key === 'class') {
             $el.className = String(value);
         } else if (key === 'value') {
@@ -24,7 +39,10 @@ export function render(vNode)
 
     (vNode.children || []).forEach(child => {
         if (child !== null && child !== undefined) {
-            $el.appendChild(render(child));
+            const rendered = render(child);
+            if (rendered) {
+                $el.appendChild(rendered);
+            }
         }
     });
 

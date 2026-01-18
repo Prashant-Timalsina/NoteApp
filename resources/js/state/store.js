@@ -1,18 +1,20 @@
-export const state = {
+import { reactive } from '../vdom/reactive';
+
+export const state = reactive({
     notes: [],
     loading: true,
     title: '',
-    note:'',
+    note: '',
     route: '/'
-};
+});
 
 let Listeners = [];
 
-export function setState(partialState){
+export function setState(partialState) {
     Object.assign(state, partialState);
-    Listeners.forEach(fn=>fn());
+    Listeners.forEach(fn => fn());
 }
 
-export function subscribe(fn){
+export function subscribe(fn) {
     Listeners.push(fn);
 }

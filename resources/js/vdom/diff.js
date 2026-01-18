@@ -3,7 +3,7 @@ import { render } from './render';
 export function changed(node1, node2) {
     return typeof node1 !== typeof node2 ||
         (typeof node1 === 'string' && node1 !== node2) ||
-        node1.type !== node2.type;
+        (typeof node1 === 'object' && node1 !== null && typeof node2 === 'object' && node2 !== null && node1.type !== node2.type);
 }
 
 export function updateElement($parent, newVNode, oldVNode, index = 0) {
@@ -19,32 +19,42 @@ export function updateElement($parent, newVNode, oldVNode, index = 0) {
         const $el = $parent.childNodes[index];
 
         // Update attributes/props
-        const props = { ...oldVNode.props, ...newVNode.props };
+        const oldProps = oldVNode.props || {};
+        const newProps = newVNode.props || {};
+        const props = { ...oldProps, ...newProps };
         Object.keys(props).forEach(name => {
-            if (newVNode.props[name] !== oldVNode.props[name]) {
+            if (newProps[name] !== oldProps[name]) {
                 if (name === 'value') {
-                    $el.value = newVNode.props[name];
+                    $el.value = newProps[name];
                 } else if (name.startsWith('on')) {
                     // Remove old event listener and add new one
                     const eventName = name.toLowerCase().substring(2);
-                    if (oldVNode.props[name]) {
-                        $el.removeEventListener(eventName, oldVNode.props[name]);
+                    if (oldProps[name]) {
+                        $el.removeEventListener(eventName, oldProps[name]);
                     }
-                    $el.addEventListener(eventName, newVNode.props[name]);
+                    if (newProps[name]) {
+                        $el.addEventListener(eventName, newProps[name]);
+                    }
                 } else {
-                    $el.setAttribute(name === 'class' ? 'class' : name, newVNode.props[name]);
+                    if (newProps[name] !== undefined && newProps[name] !== null) {
+                        $el.setAttribute(name === 'class' ? 'class' : name, newProps[name]);
+                    } else {
+                        $el.removeAttribute(name);
+                    }
                 }
             }
         });
 
-        const newLen = newVNode.children.length;
-        const oldLen = oldVNode.children.length;
+        const newChildren = newVNode.children || [];
+        const oldChildren = oldVNode.children || [];
+        const newLen = newChildren.length;
+        const oldLen = oldChildren.length;
 
         for (let i = 0; i < newLen || i < oldLen; i++) {
             updateElement(
                 $el,
-                newVNode.children[i],
-                oldVNode.children[i],
+                newChildren[i],
+                oldChildren[i],
                 i
             );
         }
