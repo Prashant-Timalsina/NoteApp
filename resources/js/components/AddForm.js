@@ -1,4 +1,5 @@
 import { defineComponent } from "../vdom/component.js";
+import { h } from '../vdom/template';
 import { state, setState } from "../state/store.js";
 import { createNote } from "../api/notes.js";
 
@@ -30,7 +31,7 @@ export const AddForm = defineComponent({
             setState({ note: e.target.value });
         }
     },
-    render(h) {
+    render() {
         return h('form', {
             class: 'flex items-center space-x-4',
             onSubmit: this.handleSubmit

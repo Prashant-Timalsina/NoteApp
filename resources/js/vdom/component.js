@@ -66,7 +66,7 @@ export function defineComponent(options) {
         // Render function
         const renderFn = () => {
             if (render) {
-                return render.call(ctx, h);
+                return render.call(ctx);
             }
             return null;
         };

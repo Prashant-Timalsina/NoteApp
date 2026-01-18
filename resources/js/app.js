@@ -16,13 +16,13 @@ function updateUI() {
     // Get component instance from router
     const componentInstance = Router();
 
-    // Update component data from global state
-    if (componentInstance.data) {
-        Object.keys(state).forEach(key => {
-            if (componentInstance.data.hasOwnProperty(key)) {
-                componentInstance.data[key] = state[key];
-            }
-        });
+    // Sync global state with component data (both are reactive)
+    if (componentInstance.ctx) {
+        componentInstance.ctx.notes = state.notes;
+        componentInstance.ctx.loading = state.loading;
+        componentInstance.ctx.title = state.title;
+        componentInstance.ctx.note = state.note;
+        componentInstance.ctx.route = state.route;
     }
 
     // Render the component

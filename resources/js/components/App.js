@@ -1,4 +1,5 @@
 import { defineComponent } from '../vdom/component';
+import { h } from '../vdom/template';
 import { NoteItem } from './NoteItem';
 import { state, setState } from "../state/store.js";
 
@@ -9,7 +10,7 @@ export const App = defineComponent({
             loading: true
         };
     },
-    render(h) {
+    render() {
         // Access reactive state directly in render
         const notes = this.notes || [];
         const loading = this.loading;
