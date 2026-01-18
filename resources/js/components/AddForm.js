@@ -1,13 +1,13 @@
-import {createElement} from "../vdom/createElement.js";
-import {state,setState} from "../state/store.js";
-import {createNote} from "../api/notes.js";
+import { createElement } from "../vdom/createElement.js";
+import { state, setState } from "../state/store.js";
+import { createNote } from "../api/notes.js";
 
-export function AddForm(){
+export function AddForm() {
     return createElement(
         'form',
         {
             class: 'flex items-center space-x-4',
-            onSubmit: async (e)=>{
+            onSubmit: async (e) => {
                 e.preventDefault();
 
                 await createNote({

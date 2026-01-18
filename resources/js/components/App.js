@@ -1,6 +1,6 @@
 import { createElement } from '../vdom/createElement';
 import { NoteItem } from './NoteItem';
-import {setState} from "../state/store.js";
+import { setState } from "../state/store.js";
 
 export function App(state) {
     return createElement(

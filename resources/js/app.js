@@ -3,8 +3,8 @@ import './bootstrap';
 import { render } from './vdom/render';
 import { updateElement } from './vdom/diff';
 import { fetchNotes } from './api/notes';
-import {Router} from "./router/router.js";
-import {subscribe} from "./state/store.js";
+import { Router } from "./router/router.js";
+import { subscribe } from "./state/store.js";
 
 let currentVDom = null;
 
