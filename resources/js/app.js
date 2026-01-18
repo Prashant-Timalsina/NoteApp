@@ -1,18 +1,16 @@
 import './bootstrap';
 
-import { state } from './state/store';
-import { App } from './components/App';
 import { render } from './vdom/render';
 import { updateElement } from './vdom/diff';
 import { fetchNotes } from './api/notes';
+import {Router} from "./router/router.js";
+import {subscribe} from "./state/store.js";
 
 let currentVDom = null;
 
 function updateUI() {
     const root = document.getElementById('app');
-    if (!root) return;
-
-    const newVDom = App(state);
+    const newVDom = Router();
 
     if (!currentVDom) {
         root.innerHTML = '';
@@ -25,8 +23,8 @@ function updateUI() {
 }
 
 async function init() {
-    updateUI();
-    await fetchNotes(updateUI);
+    subscribe(updateUI);
+    await fetchNotes();
 }
 
 document.readyState === 'loading'
