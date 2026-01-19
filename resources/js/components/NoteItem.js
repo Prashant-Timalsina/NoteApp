@@ -7,7 +7,7 @@ export function NoteItem({ title, note, id }) {
     return createElement(
         'li',
         { class: 'p-4 mb-4 bg-white shadow rounded border-l-4 border-blue-500 list-none' },
-        createElement('h2', { class: 'text-xl font-bold text-gray-800 truncate w-[50vw]' }, title),
+        createElement('h2', { class: 'text-xl font-bold text-gray-800 truncate' }, title),
         createElement('p', { class: 'mt-2 text-gray-600' }, noteData),
         createElement(
             'div',

@@ -1,5 +1,5 @@
-import { state, setState } from '../state/store';
-
+import { setState } from '../state/store';
+import axios from 'axios';
 
 export async function fetchNotes() {
     setState({ loading: true });

@@ -30,7 +30,7 @@ export function view() {
         ),
         createElement(
             "h1",
-            { class: "font-bold text-3xl mb-4" },
+            { class: "font-bold text-3xl mb-4 max-w-3xl" },
             cachedNote.title
         ),
         createElement(
