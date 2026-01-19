@@ -1,37 +1,40 @@
 import { createElement } from "../vdom/createElement.js";
-import { state, setState } from "../state/store.js";
+import { notesState, setNotesState } from "../state/notesStore.js";
+import { userState } from "../state/userStore.js";
 import { createNote } from "../api/notes.js";
 
 export function AddForm() {
     return createElement(
         'form',
         {
-            class: 'flex items-center space-x-4',
+            class: 'max-w-3xl mx-auto p-8 space-y-4',
             onSubmit: async (e) => {
                 e.preventDefault();
 
                 await createNote({
-                    title: state.title,
-                    note: state.note,
-                    user_id: 2
+                    title: notesState.title,
+                    note: notesState.note,
+                    user_id: userState.user?.id
                 });
 
-                setState({ title: '', note: '' });
+                setNotesState({ title: '', note: '' });
             }
         },
 
+        createElement('h1', { class: 'text-2xl font-bold' }, 'Create New Note'),
+
         createElement('input', {
-            value: state.title,
+            value: notesState.title,
             placeholder: 'Title',
-            class: 'border p-2 w-full',
-            onInput: e => setState({ title: e.target.value })
+            class: 'w-full border p-2 rounded',
+            onInput: e => setNotesState({ title: e.target.value })
         }),
 
         createElement('textarea', {
-            value: state.note,
+            value: notesState.note,
             placeholder: 'Note',
-            class: 'border p-2 w-full',
-            onInput: e => setState({ note: e.target.value })
+            class: 'w-full border p-2 rounded h-48',
+            onInput: e => setNotesState({ note: e.target.value })
         }),
 
         createElement('button', {

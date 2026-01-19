@@ -1,5 +1,6 @@
 import { createElement } from "../vdom/createElement";
-import { setState, state } from "../state/store";
+import { setUIState } from "../state/uiStore";
+import { notesState, setNotesState } from "../state/notesStore";
 import { fetchNote } from "../api/notes";
 
 let cachedNote = null;
@@ -14,28 +15,31 @@ export function view() {
     }
 
     return createElement("div",
-        { class: 'flex flex-col items-center justify-center min-h-screen p-8' },
+        { class: 'max-w-3xl mx-auto p-8 min-h-screen' },
         createElement("button",
             {
-                class: 'bg-slate-800 text-white px-4 py-2 mb-8 hover:bg-slate-700', onclick: () => {
-                    setState({
+                class: 'bg-slate-800 text-white px-4 py-2 mb-8 hover:bg-slate-700',
+                onClick: () => {
+                    cachedNote = null;
+                    setUIState({
                         route: '/',
-                        noteId: null,
-                        title: '',
-                        note: ''
-                    })
+                        noteId: null
+                    });
+                    setNotesState({
+                        noteId: null
+                    });
                 }
             },
             "← Back"
         ),
         createElement(
             "h1",
-            { class: "font-bold text-3xl mb-4 max-w-3xl" },
+            { class: "font-bold text-3xl mb-4" },
             cachedNote.title
         ),
         createElement(
             "p",
-            { class: "text-lg text-gray-700 max-w-2xl" },
+            { class: "text-lg text-gray-700 whitespace-pre-wrap" },
             cachedNote.note
         )
     );

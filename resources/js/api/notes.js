@@ -1,20 +1,21 @@
-import { setState } from '../state/store';
+import { notesState, setNotesState } from '../state/notesStore';
+import { setUIState } from '../state/uiStore';
 import axios from 'axios';
 
 export async function fetchNotes() {
-    setState({ loading: true });
+    setNotesState({ notesLoading: true });
 
     try {
         const res = await axios.get('/api/notes');
 
-        setState({
+        setNotesState({
             notes: res.data,
-            loading: false
+            notesLoading: false
         });
 
     } catch (err) {
         console.error('Fetch failed', err);
-        setState({ loading: false });
+        setNotesState({ notesLoading: false });
     }
 }
 
@@ -25,7 +26,7 @@ export async function createNote(noteData) {
         // Refetch notes from server to ensure data consistency
         await fetchNotes();
 
-        setState({ route: '/' });
+        setUIState({ route: '/' });
     } catch (err) {
         if (err.response && err.response.status === 422) {
             console.error('Validation Errors:', err.response.data.errors);

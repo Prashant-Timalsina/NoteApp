@@ -3,8 +3,12 @@ import './bootstrap';
 import { render } from './vdom/render';
 import { updateElement } from './vdom/diff';
 import { fetchNotes } from './api/notes';
+import { checkAuth } from './api/auth';
 import { Router } from "./router/router.js";
-import { subscribe } from "./state/store.js";
+import { subscribeUser } from "./state/userStore.js";
+import { subscribeNotes } from "./state/notesStore.js";
+import { subscribeUI } from "./state/uiStore.js";
+import { setUIState } from "./state/uiStore.js";
 
 let currentVDom = null;
 
@@ -23,8 +27,17 @@ function updateUI() {
 }
 
 async function init() {
-    subscribe(updateUI);
-    await fetchNotes();
+    subscribeUser(updateUI);
+    subscribeNotes(updateUI);
+    subscribeUI(updateUI);
+
+    const isAuthenticated = await checkAuth();
+    if (isAuthenticated) {
+        await fetchNotes();
+        setUIState({ route: '/' });
+    } else {
+        setUIState({ route: '/login' });
+    }
 }
 
 document.readyState === 'loading'

@@ -1,5 +1,6 @@
 import { createElement } from '../vdom/createElement';
-import { setState } from '../state/store';
+import { setUIState } from '../state/uiStore';
+import { setNotesState } from '../state/notesStore';
 import { loadNote } from './ViewNote';
 
 export function NoteItem({ title, note, id }) {
@@ -15,13 +16,14 @@ export function NoteItem({ title, note, id }) {
             createElement(
                 'button',
                 {
-                    class: 'btn bg-red-300 hover:bg-red-500 hover:cursor-pointer items-center justify-center',
-                    onclick: async () => {
+                    class: 'btn bg-blue-300 hover:bg-blue-500 hover:cursor-pointer items-center justify-center px-4 py-2 rounded',
+                    onClick: async () => {
                         await loadNote(id);
-                        setState({ route: '/view', noteId: id });
+                        setUIState({ route: '/view', noteId: id });
+                        setNotesState({ noteId: id });
                     }
                 },
-                "View this"
+                "View"
             )
         )
     );

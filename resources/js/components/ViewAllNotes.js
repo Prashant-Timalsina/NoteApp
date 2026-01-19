@@ -1,4 +1,4 @@
-import { state } from "../state/store";
+import { notesState } from "../state/notesStore";
 import { createElement } from "../vdom/createElement";
 import { NoteItem } from "./NoteItem";
 
@@ -6,8 +6,8 @@ export function allNotes() {
     return createElement(
         'ul',
         { class: 'space-y-4' },
-        ...(state.notes.length
-            ? state.notes.map(note => NoteItem(note))
+        ...(notesState.notes.length
+            ? notesState.notes.map(note => NoteItem(note))
             : [
                 createElement(
                     'div',

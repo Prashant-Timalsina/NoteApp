@@ -39,6 +39,13 @@ export function updateElement($parent, newVNode, oldVNode, index = 0) {
                 if (name === 'value') {
                     $el.value = newVNode.props[name];
                 }
+                else if (name === 'disabled') {
+                    if (newVNode.props[name]) {
+                        $el.disabled = true;
+                    } else {
+                        $el.disabled = false;
+                    }
+                }
                 else if (name.startsWith('on')) {
                     // Remove old event listener and add new one
                     const eventName = name.toLowerCase().substring(2);

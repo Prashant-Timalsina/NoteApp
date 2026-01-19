@@ -1,5 +1,4 @@
-export function render(vNode)
-{
+export function render(vNode) {
     if (!vNode) return document.createTextNode(''); // Guard against null/undefined
 
     if (typeof vNode === 'string' || typeof vNode === 'number') {
@@ -17,6 +16,11 @@ export function render(vNode)
             $el.className = String(value);
         } else if (key === 'value') {
             $el.value = value; // Use property instead of attribute for inputs
+        } else if (key === 'disabled') {
+            // Handle disabled as a property, not attribute
+            if (value) {
+                $el.disabled = true;
+            }
         } else {
             $el.setAttribute(key, String(value));
         }
