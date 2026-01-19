@@ -7,15 +7,19 @@ export function changed(node1, node2) {
 }
 
 export function updateElement($parent, newVNode, oldVNode, index = 0) {
+
     if (!oldVNode) {
         $parent.appendChild(render(newVNode));
-    } else if (!newVNode) {
+    }
+    else if (!newVNode) {
         if ($parent.childNodes[index]) {
             $parent.removeChild($parent.childNodes[index]);
         }
-    } else if (changed(newVNode, oldVNode)) {
+    }
+    else if (changed(newVNode, oldVNode)) {
         $parent.replaceChild(render(newVNode), $parent.childNodes[index]);
-    } else if (newVNode.type) {
+    }
+    else if (newVNode.type) {
         const $el = $parent.childNodes[index];
 
         // Update attributes/props
@@ -24,7 +28,8 @@ export function updateElement($parent, newVNode, oldVNode, index = 0) {
             if (newVNode.props[name] !== oldVNode.props[name]) {
                 if (name === 'value') {
                     $el.value = newVNode.props[name];
-                } else if (name.startsWith('on')) {
+                }
+                else if (name.startsWith('on')) {
                     // Remove old event listener and add new one
                     const eventName = name.toLowerCase().substring(2);
                     if (oldVNode.props[name]) {

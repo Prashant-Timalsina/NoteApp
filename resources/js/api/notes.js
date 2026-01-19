@@ -34,3 +34,14 @@ export async function createNote(noteData) {
         }
     }
 }
+
+export async function fetchNote(noteId) {
+    try {
+        const response = await axios.get(`/api/notes/${noteId}`);
+        return response.data;
+    }
+    catch (err) {
+        console.error("Fetch note failed", err);
+        return null;
+    }
+}
