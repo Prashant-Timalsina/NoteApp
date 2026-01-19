@@ -8,28 +8,50 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
 
-    public function register(): User{
+    public function register(Request $request){
 
-        $validated = request()->validate([
+        $validated = $request->validate([
             'name' => 'required|max:50',
             'email' => 'required|email|unique:users',
             'password' => 'min:8',
         ]);
 
-        $validated['password'] = bcrypt($validated['password']);
-        return User::query()->create($validated);
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+        ]);
+
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ], 201);
     }
 
     public function login(){
-        if (!auth()->attempt(request(['email', 'password']))) {
+        $credentials = request()->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if (!auth()->attempt($credentials)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-        return auth()->user();
+
+        $user = auth()->user();
+        $token = $user->createToken('api-token')->plainTextToken;
+        return response()->json([
+            'user' => $user,
+            'token' => $token,
+        ]);
     }
 
-    public function logout(){
-        auth()->logout();
-        return ['message'=>'Logged out'];
+    public function logout(Request $request){
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out successfully']);
+        
     }
 
     /**
